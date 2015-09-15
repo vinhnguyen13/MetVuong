@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'name'=>'Met Vuong',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
@@ -27,6 +28,15 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'view' => [
+            'theme' => [
+                'basePath' => '@webroot/themes/metvuong1',
+                'baseUrl' => '@webroot/themes/metvuong1',
+                'pathMap' => [
+                    '@app/views' => '@webroot/themes/metvuong1/views',
+                ],
+            ],
         ],
     ],
     'params' => $params,
