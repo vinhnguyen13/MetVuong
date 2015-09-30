@@ -109,11 +109,12 @@ return array(
                     '@mihaildev/ckeditor' => $vendorDir . '/mihaildev/yii2-ckeditor',
                 ),
         ),
-    'vsoft/express' =>
+    'vsoft' =>
         array(
             'alias' =>
                 array(
                     '@vsoft/express' => $vendorDir . '/vsoft/express',
+					'@vsoft/buildingProject' => $vendorDir . '/vsoft/building-project',
                 ),
         ),
     'johnb0' =>

@@ -34,6 +34,7 @@ use mihaildev\ckeditor\CKEditor;
         'editorOptions' => [
             'preset' => 'full',
             'inline' => false,
+			'filebrowserUploadUrl' => 'abc'
         ],
     ]); ?>
 

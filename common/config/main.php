@@ -54,6 +54,9 @@ return [
                 'Account' => 'dektrium\user\models\Account',
             ],
         ],
+        'buildingProject' => [
+        	'class' => 'vsoft\buildingProject\Module',
+        ],
     ],
     'components' => [
         'user' => [
