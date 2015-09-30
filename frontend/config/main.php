@@ -13,6 +13,11 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'express' => [
+            'class' => 'vsoft\express\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             'baseUrl' => $baseUrl,

@@ -30,7 +30,6 @@ return [
         ],
         'express' => [
             'class' => 'vsoft\express\Module',
-            'controllerNamespace' => 'vsoft\express\controllers\backend'
         ],
         'gallery' => [
             'class' => 'johnb0\gallery\Module',
