@@ -109,11 +109,11 @@ return array(
                     '@mihaildev/ckeditor' => $vendorDir . '/mihaildev/yii2-ckeditor',
                 ),
         ),
-    'vsoft/shop' =>
+    'vsoft/express' =>
         array(
             'alias' =>
                 array(
-                    '@vsoft/shop' => $vendorDir . '/vsoft/shop',
+                    '@vsoft/express' => $vendorDir . '/vsoft/express',
                 ),
         ),
     'johnb0' =>
@@ -135,6 +135,8 @@ return array(
             'alias' =>
                 array(
                     '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine',
+                    '@Imagine/Image' => $vendorDir . '/yiisoft/yii-imagine-master/lib/Image',
+                    '@Imagine/Gd' => $vendorDir . '/yiisoft/yii-imagine-master/lib/Gd',
                 ),
         ),
     'newerton' =>
@@ -152,5 +154,25 @@ return array(
                     '@Zelenin/Slugifier' => $vendorDir . '/zelenin/slugifier',
                 ),
         ),
+    'kartik' =>
+        array(
+            'alias' =>
+                array(
+                    '@kartik/datetime' => $vendorDir . '/kartik-v/yii2-widget-datetimepicker-master',
+                    '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base-master',
+                    '@kartik/helpers' => $vendorDir . '/kartik-v/yii2-helpers-master',
+                    '@kartik/helpers' => $vendorDir . '/kartik-v/yii2-helpers-master',
+                    '@kartik/money' => $vendorDir . '/kartik-v/yii2-money-master',
+                ),
+        ),
+    'mervick' =>
+        array(
+            'alias' =>
+                array(
+                    '@mervick/image' => $vendorDir . '/mervick/yii2-image-master',
+                    '@mervick/image/drivers' => $vendorDir . '/mervick/yii2-image-master/drivers',
+                ),
+        ),
+
 
 );
