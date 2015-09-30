@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50626
 File Encoding         : 65001
 
-Date: 2015-09-16 09:40:03
+Date: 2015-09-30 11:36:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -273,6 +273,384 @@ CREATE TABLE `auth_rule` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `blog_catalog`
+-- ----------------------------
+DROP TABLE IF EXISTS `blog_catalog`;
+CREATE TABLE `blog_catalog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL,
+  `surname` varchar(128) NOT NULL,
+  `banner` varchar(255) DEFAULT NULL,
+  `is_nav` int(11) NOT NULL DEFAULT '1',
+  `sort_order` int(11) NOT NULL DEFAULT '50',
+  `page_size` int(11) NOT NULL DEFAULT '10',
+  `template` varchar(255) NOT NULL DEFAULT 'post',
+  `redirect_url` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `is_nav` (`is_nav`),
+  KEY `sort_order` (`sort_order`),
+  KEY `status` (`status`),
+  KEY `created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of blog_catalog
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `blog_comment`
+-- ----------------------------
+DROP TABLE IF EXISTS `blog_comment`;
+CREATE TABLE `blog_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `author` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `url` varchar(128) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`),
+  KEY `status` (`status`),
+  KEY `created_at` (`created_at`),
+  CONSTRAINT `blog_comment_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `blog_post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of blog_comment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `blog_post`
+-- ----------------------------
+DROP TABLE IF EXISTS `blog_post`;
+CREATE TABLE `blog_post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `catalog_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `tags` varchar(255) NOT NULL,
+  `surname` varchar(128) NOT NULL,
+  `click` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `catalog_id` (`catalog_id`),
+  KEY `status` (`status`),
+  KEY `created_at` (`created_at`),
+  KEY `FK_post_user` (`user_id`),
+  CONSTRAINT `blog_post_ibfk_1` FOREIGN KEY (`catalog_id`) REFERENCES `blog_catalog` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `blog_post_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of blog_post
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `blog_tag`
+-- ----------------------------
+DROP TABLE IF EXISTS `blog_tag`;
+CREATE TABLE `blog_tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `frequency` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `frequency` (`frequency`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of blog_tag
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `cms_catalog`
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_catalog`;
+CREATE TABLE `cms_catalog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL,
+  `surname` varchar(255) DEFAULT NULL,
+  `brief` varchar(1022) DEFAULT NULL,
+  `content` text,
+  `seo_title` varchar(255) DEFAULT NULL,
+  `seo_keywords` varchar(255) DEFAULT NULL,
+  `seo_description` varchar(255) DEFAULT NULL,
+  `banner` varchar(255) DEFAULT NULL,
+  `is_nav` int(11) NOT NULL DEFAULT '1',
+  `sort_order` int(11) NOT NULL DEFAULT '50',
+  `page_type` varchar(255) NOT NULL DEFAULT 'page',
+  `page_size` int(11) NOT NULL DEFAULT '10',
+  `template_list` varchar(255) NOT NULL DEFAULT 'list',
+  `template_show` varchar(255) NOT NULL DEFAULT 'show',
+  `template_page` varchar(255) NOT NULL DEFAULT 'page',
+  `redirect_url` varchar(255) DEFAULT NULL,
+  `click` int(11) DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `is_nav` (`is_nav`),
+  KEY `sort_order` (`sort_order`),
+  KEY `status` (`status`),
+  KEY `created_at` (`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of cms_catalog
+-- ----------------------------
+INSERT INTO `cms_catalog` VALUES ('1', '0', 'Static Page', 'Static Page', '', '<p>Static Page</p>\r\n', '', '', '', null, '1', '50', 'page', '10', 'list', 'show', 'page', '', '0', '1', '1438335832', '1442910007');
+INSERT INTO `cms_catalog` VALUES ('2', '0', 'News', 'NEWS', '', '<p>News</p>\r\n', '', '', '', null, '1', '50', 'list', '10', 'list', 'show', 'page', '', '0', '1', '1438336780', '1442822522');
+INSERT INTO `cms_catalog` VALUES ('3', '0', 'About Us', 'ABOUT', '', '<p>About Us</p>\r\n', '', '', '', null, '1', '50', 'list', '10', 'list', 'show', 'page', '', '0', '1', '1442800235', '1442826958');
+
+-- ----------------------------
+-- Table structure for `cms_show`
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_show`;
+CREATE TABLE `cms_show` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `catalog_id` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `surname` varchar(128) DEFAULT NULL,
+  `brief` varchar(1022) DEFAULT NULL,
+  `content` text,
+  `seo_title` varchar(255) DEFAULT NULL,
+  `seo_keywords` varchar(255) DEFAULT NULL,
+  `seo_description` varchar(255) DEFAULT NULL,
+  `banner` varchar(255) DEFAULT NULL,
+  `template_show` varchar(255) NOT NULL DEFAULT 'show',
+  `author` varchar(255) NOT NULL DEFAULT 'admin',
+  `click` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  `create_by` int(11) NOT NULL,
+  `update_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `catalog_id` (`catalog_id`),
+  KEY `status` (`status`),
+  KEY `created_at` (`created_at`),
+  CONSTRAINT `cms_show_ibfk_1` FOREIGN KEY (`catalog_id`) REFERENCES `cms_catalog` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of cms_show
+-- ----------------------------
+INSERT INTO `cms_show` VALUES ('4', '2', 'Lorem ipsum dolor sit amet dolor sit amet', 'lorem-ipsum-dolor-sit-amet-dolor-sit-amet', 'Yii2 News 1', '', '<p>Republican Party leaders, whose presidential nominees have not won a majority of female voters since 1988, are setting their sights on making electoral gains among women in the 2016 presidential race and trying to close the gender gap in swing states like Florida and Colorado. But the remarks and tone about women at Thursday&rsquo;s debate &mdash; and the sight of 10 male candidates owning the stage &mdash; may have only damaged the party&rsquo;s standing among female voters in the 2016 general election, according to pollsters and some Republican leaders.<br />\r\n<br />\r\n&ldquo;So much of the debate was all about appealing to male voters and other parts of the Republican base, rather than doing anything to help the party&rsquo;s general election goal of trying to be more inclusive,&rdquo; said Lee M. Miringoff, director of the Marist College Institute for Public Opinion. &ldquo;By being callous or showing disregard toward women, and then laughing it off with a charge of political correctness or simply saying they&rsquo;re taking conservative stands, the Republicans could win over some of the older male Republican voters out there. But what about female voters?&rdquo;<br />\r\n<br />\r\nDemocrats were gleeful at the tone of the debate, already imagining future campaign advertisements featuring debate cutaways with Mr. Rubio saying that future Americans will &ldquo;call us barbarians for murdering millions of babies.&rdquo;<br />\r\n<br />\r\nIn the short term, however, the political peril for the Republican candidates may not be so grave. They are largely focused now on winning over likely Republican voters who will decide the party&rsquo;s nomination &mdash; an electorate that tends to skew male and older in many key states.<br />\r\n<br />\r\nRecent polls of Republican voters indicate that Mr. Trump is performing strongly among men and to a slightly lesser extent among women, though sizable numbers of women also say they would not support him. It remains an open question whether Mr. Trump offended his supporters, or many other likely primary voters, by refusing to renounce his past descriptions of women as &ldquo;fat pigs&rdquo; during the debate; indeed, pollsters say he may have struck a chord with some voters by saying he doesn&rsquo;t &ldquo;have time for political correctness&rdquo; when he was asked about his remarks.</p>\r\n', '', '', '', '04.png', 'show', 'admin', '0', '1', '1438336814', '2147483647', '0', '1');
+INSERT INTO `cms_show` VALUES ('5', '3', 'Lancaster Nguyen Trai', 'lancaster-nguyen-trai', '', '', '<p>Located on an area of over 5.000 m2, the building Lancaster Nguyen Trai is a complex including commercial center, office area and apartments for the upper class value. With the reputation of the brand Lancaster, the project promises to bring our investors excellent investment opportunities as well as to provide the inhabitants in the area with a luxurious living environment with superior services</p>\r\n', '', '', '', '04.png', 'show', 'admin', '0', '1', '2147483647', '2147483647', '1', '1');
+INSERT INTO `cms_show` VALUES ('6', '3', 'Lancaster Le Thanh Ton', 'lancaster-le-thanh-ton', '', '', '<p>ancaster offers you a sweeping panoramic view of the city skyline from virtually every window. Besides 109 ultra-luxury and graciously furnished apartments ranging from studios to penthouses, the building also features 6 floors of working space for setting up professional and supreme offices.In addition, Lancaster also offers you all of the exceptional amenities and renowned white-glove services of Trung Thuy Group, promising to be the ideal place for both personal life and business..</p>\r\n', '', '', '', '04.png', 'show', 'admin', '0', '1', '0', '2147483647', '0', '1');
+INSERT INTO `cms_show` VALUES ('7', '2', 'Lorem ipsum dolor sit amet dolor sit amet 2', 'lorem-ipsum-dolor-sit-amet-dolor-sit-amet-2', '', '', '<p>Located on an area of over 5.000 m2, the building Lancaster Nguyen Trai is a complex including commercial center, office area and apartments for the upper class value. With the reputation of the brand Lancaster, the project promises to bring our investors excellent investment opportunities as well as to provide the inhabitants in the area with a luxurious living environment with superior services</p>\r\n', '', '', '', '01.png', 'show', 'admin', '0', '1', '2147483647', '2147483647', '1', '1');
+INSERT INTO `cms_show` VALUES ('8', '2', 'Lorem ipsum dolor sit amet dolor sit amet 3', 'lorem-ipsum-dolor-sit-amet-dolor-sit-amet-3', '', '', '<p>Located on an area of over 5.000 m2, the building Lancaster Nguyen Trai is a complex including commercial center, office area and apartments for the upper class value. With the reputation of the brand Lancaster, the project promises to bring our investors excellent investment opportunities as well as to provide the inhabitants in the area with a luxurious living environment with superior services</p>\r\n', '', '', '', '02.png', 'show', 'admin', '0', '1', '2147483647', '2147483647', '1', '1');
+INSERT INTO `cms_show` VALUES ('9', '2', 'Lorem ipsum dolor sit amet dolor sit amet 4', 'lorem-ipsum-dolor-sit-amet-dolor-sit-amet-4', '', '', '<p>Located on an area of over 5.000 m2, the building Lancaster Nguyen Trai is a complex including commercial center, office area and apartments for the upper class value. With the reputation of the brand Lancaster, the project promises to bring our investors excellent investment opportunities as well as to provide the inhabitants in the area with a luxurious living environment with superior services</p>\r\n', '', '', '', '03.png', 'show', 'admin', '0', '1', '2147483647', '2147483647', '1', '1');
+
+-- ----------------------------
+-- Table structure for `gallery`
+-- ----------------------------
+DROP TABLE IF EXISTS `gallery`;
+CREATE TABLE `gallery` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of gallery
+-- ----------------------------
+INSERT INTO `gallery` VALUES ('1', 'Apartments', 'Apartments', '1');
+INSERT INTO `gallery` VALUES ('2', 'Amenities', 'Amenities', '1');
+INSERT INTO `gallery` VALUES ('3', 'Views', 'Views', '1');
+INSERT INTO `gallery` VALUES ('4', 'Neighborhood', 'Neighborhood', '1');
+
+-- ----------------------------
+-- Table structure for `gallery_photo`
+-- ----------------------------
+DROP TABLE IF EXISTS `gallery_photo`;
+CREATE TABLE `gallery_photo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `gallery_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `filename` varchar(255) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `dirname` varchar(255) DEFAULT NULL,
+  `alt` varchar(100) DEFAULT NULL,
+  `thumbs` varchar(255) DEFAULT NULL,
+  `settings` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of gallery_photo
+-- ----------------------------
+INSERT INTO `gallery_photo` VALUES ('15', '3', 'North', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '35603b7f34599a.png', null, 'image/png', '1147751', 'views_3', null, 'a:3:{s:5:\"small\";s:25:\"35603b7f34599a-120x80.png\";s:6:\"medium\";s:26:\"35603b7f34599a-400x300.png\";s:5:\"large\";s:26:\"35603b7f34599a-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('16', '3', 'East', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '35603b7f7e8f65.png', null, 'image/png', '904738', 'views_3', null, 'a:3:{s:5:\"small\";s:25:\"35603b7f7e8f65-120x80.png\";s:6:\"medium\";s:26:\"35603b7f7e8f65-400x300.png\";s:5:\"large\";s:26:\"35603b7f7e8f65-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('18', '3', 'South', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '35603b808876de.png', null, 'image/png', '1537808', 'views_3', null, 'a:3:{s:5:\"small\";s:25:\"35603b808876de-120x80.png\";s:6:\"medium\";s:26:\"35603b808876de-400x300.png\";s:5:\"large\";s:26:\"35603b808876de-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('20', '2', 'Swimming Pool', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '25603b8bfa4704.png', null, 'image/png', '1043911', 'amenities_2', null, 'a:3:{s:5:\"small\";s:25:\"25603b8bfa4704-120x80.png\";s:6:\"medium\";s:26:\"25603b8bfa4704-400x300.png\";s:5:\"large\";s:26:\"25603b8bfa4704-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('21', '2', 'Fitness Center', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '25603b8c2d4137.png', null, 'image/png', '904738', 'amenities_2', null, 'a:3:{s:5:\"small\";s:25:\"25603b8c2d4137-120x80.png\";s:6:\"medium\";s:26:\"25603b8c2d4137-400x300.png\";s:5:\"large\";s:26:\"25603b8c2d4137-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('22', '2', 'Healthy Care', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '25603b8c5615ad.png', null, 'image/png', '1537808', 'amenities_2', null, 'a:3:{s:5:\"small\";s:25:\"25603b8c5615ad-120x80.png\";s:6:\"medium\";s:26:\"25603b8c5615ad-400x300.png\";s:5:\"large\";s:26:\"25603b8c5615ad-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('23', '2', 'Skybar', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '25603b8c6e95be.png', null, 'image/png', '1147751', 'amenities_2', null, 'a:3:{s:5:\"small\";s:25:\"25603b8c6e95be-120x80.png\";s:6:\"medium\";s:26:\"25603b8c6e95be-400x300.png\";s:5:\"large\";s:26:\"25603b8c6e95be-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('26', '4', 'Restaurants', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '45603d30b47531.png', null, 'image/png', '904738', 'neighborhood_4', null, 'a:3:{s:5:\"small\";s:25:\"45603d30b47531-120x80.png\";s:6:\"medium\";s:26:\"45603d30b47531-400x300.png\";s:5:\"large\";s:26:\"45603d30b47531-800x600.png\";}', '{\"displayCaption\":\"1\"}');
+INSERT INTO `gallery_photo` VALUES ('29', '1', 'Living Room', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '15603d3d218434.png', null, 'image/png', '1537808', 'apartments_1', null, 'a:3:{s:5:\"small\";s:25:\"15603d3d218434-120x80.png\";s:6:\"medium\";s:26:\"15603d3d218434-400x300.png\";s:5:\"large\";s:26:\"15603d3d218434-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('30', '1', 'Kitchen', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '15603d3d497404.png', null, 'image/png', '1147751', 'apartments_1', null, 'a:3:{s:5:\"small\";s:25:\"15603d3d497404-120x80.png\";s:6:\"medium\";s:26:\"15603d3d497404-400x300.png\";s:5:\"large\";s:26:\"15603d3d497404-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('31', '1', 'Bathroom', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '15603d3dd1dff1.png', null, 'image/png', '1043911', 'apartments_1', null, 'a:3:{s:5:\"small\";s:25:\"15603d3dd1dff1-120x80.png\";s:6:\"medium\";s:26:\"15603d3dd1dff1-400x300.png\";s:5:\"large\";s:26:\"15603d3dd1dff1-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('32', '1', 'Bedroom', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '15603d3df1a1c6.png', null, 'image/png', '904738', 'apartments_1', null, 'a:3:{s:5:\"small\";s:25:\"15603d3df1a1c6-120x80.png\";s:6:\"medium\";s:26:\"15603d3df1a1c6-400x300.png\";s:5:\"large\";s:26:\"15603d3df1a1c6-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('33', '3', 'West', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '35604c3ded6c22.png', null, 'image/png', '479123', 'views_3', null, 'a:3:{s:5:\"small\";s:25:\"35604c3ded6c22-120x80.png\";s:6:\"medium\";s:26:\"35604c3ded6c22-400x300.png\";s:5:\"large\";s:26:\"35604c3ded6c22-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('34', '4', 'Markets', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '45604c43125477.png', null, 'image/png', '1043911', 'neighborhood_4', null, 'a:3:{s:5:\"small\";s:25:\"45604c43125477-120x80.png\";s:6:\"medium\";s:26:\"45604c43125477-400x300.png\";s:5:\"large\";s:26:\"45604c43125477-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('35', '4', 'Shopping', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '45604c433d5552.png', null, 'image/png', '1147751', 'neighborhood_4', null, 'a:3:{s:5:\"small\";s:25:\"45604c433d5552-120x80.png\";s:6:\"medium\";s:26:\"45604c433d5552-400x300.png\";s:5:\"large\";s:26:\"45604c433d5552-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('36', '4', 'Entertaiment', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '45604c43609fb2.png', null, 'image/png', '1537808', 'neighborhood_4', null, 'a:3:{s:5:\"small\";s:25:\"45604c43609fb2-120x80.png\";s:6:\"medium\";s:26:\"45604c43609fb2-400x300.png\";s:5:\"large\";s:26:\"45604c43609fb2-800x600.png\";}', null);
+INSERT INTO `gallery_photo` VALUES ('37', '4', 'Parks', '<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the</p>\r\n', '45604c472e7e83.png', null, 'image/png', '972316', 'neighborhood_4', null, 'a:3:{s:5:\"small\";s:25:\"45604c472e7e83-120x80.png\";s:6:\"medium\";s:26:\"45604c472e7e83-400x300.png\";s:5:\"large\";s:26:\"45604c472e7e83-800x600.png\";}', null);
+
+-- ----------------------------
+-- Table structure for `language`
+-- ----------------------------
+DROP TABLE IF EXISTS `language`;
+CREATE TABLE `language` (
+  `language_id` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `language` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
+  `country` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `name_ascii` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `status` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of language
+-- ----------------------------
+INSERT INTO `language` VALUES ('af-ZA', 'af', 'za', 'Afrikaans', 'Afrikaans', '1');
+INSERT INTO `language` VALUES ('ar-AR', 'ar', 'ar', '‏العربية‏', 'Arabic', '0');
+INSERT INTO `language` VALUES ('az-AZ', 'az', 'az', 'Azərbaycan dili', 'Azerbaijani', '0');
+INSERT INTO `language` VALUES ('be-BY', 'be', 'by', 'Беларуская', 'Belarusian', '0');
+INSERT INTO `language` VALUES ('bg-BG', 'bg', 'bg', 'Български', 'Bulgarian', '0');
+INSERT INTO `language` VALUES ('bn-IN', 'bn', 'in', 'বাংলা', 'Bengali', '0');
+INSERT INTO `language` VALUES ('bs-BA', 'bs', 'ba', 'Bosanski', 'Bosnian', '0');
+INSERT INTO `language` VALUES ('ca-ES', 'ca', 'es', 'Català', 'Catalan', '0');
+INSERT INTO `language` VALUES ('cs-CZ', 'cs', 'cz', 'Čeština', 'Czech', '0');
+INSERT INTO `language` VALUES ('cy-GB', 'cy', 'gb', 'Cymraeg', 'Welsh', '0');
+INSERT INTO `language` VALUES ('da-DK', 'da', 'dk', 'Dansk', 'Danish', '0');
+INSERT INTO `language` VALUES ('de-DE', 'de', 'de', 'Deutsch', 'German', '0');
+INSERT INTO `language` VALUES ('el-GR', 'el', 'gr', 'Ελληνικά', 'Greek', '0');
+INSERT INTO `language` VALUES ('en-GB', 'en', 'gb', 'English (UK)', 'English (UK)', '1');
+INSERT INTO `language` VALUES ('en-PI', 'en', 'pi', 'English (Pirate)', 'English (Pirate)', '0');
+INSERT INTO `language` VALUES ('en-UD', 'en', 'ud', 'English (Upside Down)', 'English (Upside Down)', '0');
+INSERT INTO `language` VALUES ('en-US', 'en', 'us', 'English (US)', 'English (US)', '1');
+INSERT INTO `language` VALUES ('eo-EO', 'eo', 'eo', 'Esperanto', 'Esperanto', '0');
+INSERT INTO `language` VALUES ('es-ES', 'es', 'es', 'Español (España)', 'Spanish (Spain)', '0');
+INSERT INTO `language` VALUES ('es-LA', 'es', 'la', 'Español', 'Spanish', '0');
+INSERT INTO `language` VALUES ('et-EE', 'et', 'ee', 'Eesti', 'Estonian', '0');
+INSERT INTO `language` VALUES ('eu-ES', 'eu', 'es', 'Euskara', 'Basque', '0');
+INSERT INTO `language` VALUES ('fa-IR', 'fa', 'ir', '‏فارسی‏', 'Persian', '0');
+INSERT INTO `language` VALUES ('fb-LT', 'fb', 'lt', 'Leet Speak', 'Leet Speak', '0');
+INSERT INTO `language` VALUES ('fi-FI', 'fi', 'fi', 'Suomi', 'Finnish', '0');
+INSERT INTO `language` VALUES ('fo-FO', 'fo', 'fo', 'Føroyskt', 'Faroese', '0');
+INSERT INTO `language` VALUES ('fr-CA', 'fr', 'ca', 'Français (Canada)', 'French (Canada)', '0');
+INSERT INTO `language` VALUES ('fr-FR', 'fr', 'fr', 'Français (France)', 'French (France)', '0');
+INSERT INTO `language` VALUES ('fy-NL', 'fy', 'nl', 'Frysk', 'Frisian', '0');
+INSERT INTO `language` VALUES ('ga-IE', 'ga', 'ie', 'Gaeilge', 'Irish', '0');
+INSERT INTO `language` VALUES ('gl-ES', 'gl', 'es', 'Galego', 'Galician', '0');
+INSERT INTO `language` VALUES ('he-IL', 'he', 'il', '‏עברית‏', 'Hebrew', '0');
+INSERT INTO `language` VALUES ('hi-IN', 'hi', 'in', 'हिन्दी', 'Hindi', '0');
+INSERT INTO `language` VALUES ('hr-HR', 'hr', 'hr', 'Hrvatski', 'Croatian', '0');
+INSERT INTO `language` VALUES ('hu-HU', 'hu', 'hu', 'Magyar', 'Hungarian', '0');
+INSERT INTO `language` VALUES ('hy-AM', 'hy', 'am', 'Հայերեն', 'Armenian', '0');
+INSERT INTO `language` VALUES ('id-ID', 'id', 'id', 'Bahasa Indonesia', 'Indonesian', '0');
+INSERT INTO `language` VALUES ('is-IS', 'is', 'is', 'Íslenska', 'Icelandic', '0');
+INSERT INTO `language` VALUES ('it-IT', 'it', 'it', 'Italiano', 'Italian', '0');
+INSERT INTO `language` VALUES ('ja-JP', 'ja', 'jp', '日本語', 'Japanese', '0');
+INSERT INTO `language` VALUES ('ka-GE', 'ka', 'ge', 'ქართული', 'Georgian', '0');
+INSERT INTO `language` VALUES ('km-KH', 'km', 'kh', 'ភាសាខ្មែរ', 'Khmer', '0');
+INSERT INTO `language` VALUES ('ko-KR', 'ko', 'kr', '한국어', 'Korean', '0');
+INSERT INTO `language` VALUES ('ku-TR', 'ku', 'tr', 'Kurdî', 'Kurdish', '0');
+INSERT INTO `language` VALUES ('la-VA', 'la', 'va', 'lingua latina', 'Latin', '0');
+INSERT INTO `language` VALUES ('lt-LT', 'lt', 'lt', 'Lietuvių', 'Lithuanian', '0');
+INSERT INTO `language` VALUES ('lv-LV', 'lv', 'lv', 'Latviešu', 'Latvian', '0');
+INSERT INTO `language` VALUES ('mk-MK', 'mk', 'mk', 'Македонски', 'Macedonian', '0');
+INSERT INTO `language` VALUES ('ml-IN', 'ml', 'in', 'മലയാളം', 'Malayalam', '0');
+INSERT INTO `language` VALUES ('ms-MY', 'ms', 'my', 'Bahasa Melayu', 'Malay', '0');
+INSERT INTO `language` VALUES ('nb-NO', 'nb', 'no', 'Norsk (bokmål)', 'Norwegian (bokmal)', '0');
+INSERT INTO `language` VALUES ('ne-NP', 'ne', 'np', 'नेपाली', 'Nepali', '0');
+INSERT INTO `language` VALUES ('nl-NL', 'nl', 'nl', 'Nederlands', 'Dutch', '0');
+INSERT INTO `language` VALUES ('nn-NO', 'nn', 'no', 'Norsk (nynorsk)', 'Norwegian (nynorsk)', '0');
+INSERT INTO `language` VALUES ('pa-IN', 'pa', 'in', 'ਪੰਜਾਬੀ', 'Punjabi', '0');
+INSERT INTO `language` VALUES ('pl-PL', 'pl', 'pl', 'Polski', 'Polish', '0');
+INSERT INTO `language` VALUES ('ps-AF', 'ps', 'af', '‏پښتو‏', 'Pashto', '0');
+INSERT INTO `language` VALUES ('pt-BR', 'pt', 'br', 'Português (Brasil)', 'Portuguese (Brazil)', '0');
+INSERT INTO `language` VALUES ('pt-PT', 'pt', 'pt', 'Português (Portugal)', 'Portuguese (Portugal)', '0');
+INSERT INTO `language` VALUES ('ro-RO', 'ro', 'ro', 'Română', 'Romanian', '0');
+INSERT INTO `language` VALUES ('ru-RU', 'ru', 'ru', 'Русский', 'Russian', '0');
+INSERT INTO `language` VALUES ('sk-SK', 'sk', 'sk', 'Slovenčina', 'Slovak', '0');
+INSERT INTO `language` VALUES ('sl-SI', 'sl', 'si', 'Slovenščina', 'Slovenian', '0');
+INSERT INTO `language` VALUES ('sq-AL', 'sq', 'al', 'Shqip', 'Albanian', '0');
+INSERT INTO `language` VALUES ('sr-RS', 'sr', 'rs', 'Српски', 'Serbian', '0');
+INSERT INTO `language` VALUES ('sv-SE', 'sv', 'se', 'Svenska', 'Swedish', '0');
+INSERT INTO `language` VALUES ('sw-KE', 'sw', 'ke', 'Kiswahili', 'Swahili', '0');
+INSERT INTO `language` VALUES ('ta-IN', 'ta', 'in', 'தமிழ்', 'Tamil', '0');
+INSERT INTO `language` VALUES ('te-IN', 'te', 'in', 'తెలుగు', 'Telugu', '0');
+INSERT INTO `language` VALUES ('th-TH', 'th', 'th', 'ภาษาไทย', 'Thai', '0');
+INSERT INTO `language` VALUES ('tl-PH', 'tl', 'ph', 'Filipino', 'Filipino', '0');
+INSERT INTO `language` VALUES ('tr-TR', 'tr', 'tr', 'Türkçe', 'Turkish', '0');
+INSERT INTO `language` VALUES ('uk-UA', 'uk', 'ua', 'Українська', 'Ukrainian', '0');
+INSERT INTO `language` VALUES ('vi-VN', 'vi', 'vn', 'Tiếng Việt', 'Vietnamese', '0');
+INSERT INTO `language` VALUES ('xx-XX', 'xx', 'xx', 'Fejlesztő', 'Developer', '0');
+INSERT INTO `language` VALUES ('zh-CN', 'zh', 'cn', '中文(简体)', 'Simplified Chinese (China)', '0');
+INSERT INTO `language` VALUES ('zh-HK', 'zh', 'hk', '中文(香港)', 'Traditional Chinese (Hong Kong)', '0');
+INSERT INTO `language` VALUES ('zh-TW', 'zh', 'tw', '中文(台灣)', 'Traditional Chinese (Taiwan)', '0');
+
+-- ----------------------------
+-- Table structure for `language_source`
+-- ----------------------------
+DROP TABLE IF EXISTS `language_source`;
+CREATE TABLE `language_source` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `category` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `message` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of language_source
+-- ----------------------------
+INSERT INTO `language_source` VALUES ('7', 'javascript', 'Translation Language: {name}');
+INSERT INTO `language_source` VALUES ('8', 'javascript', 'Save');
+INSERT INTO `language_source` VALUES ('9', 'javascript', 'Close');
+INSERT INTO `language_source` VALUES ('10', 'javascript', 'Hello!');
+INSERT INTO `language_source` VALUES ('11', 'javascript', 'Hello {name}');
+INSERT INTO `language_source` VALUES ('12', 'javascript', 'Hello {first_name} {last_name}');
+
+-- ----------------------------
+-- Table structure for `language_translate`
+-- ----------------------------
+DROP TABLE IF EXISTS `language_translate`;
+CREATE TABLE `language_translate` (
+  `id` int(10) unsigned NOT NULL,
+  `language` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `translation` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`,`language`),
+  KEY `language` (`language`),
+  CONSTRAINT `language_translate_ibfk_1` FOREIGN KEY (`language`) REFERENCES `language` (`language_id`) ON DELETE CASCADE,
+  CONSTRAINT `language_translate_ibfk_2` FOREIGN KEY (`id`) REFERENCES `language_source` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of language_translate
+-- ----------------------------
+INSERT INTO `language_translate` VALUES ('7', 'vi-VN', null);
+
+-- ----------------------------
 -- Table structure for `migration`
 -- ----------------------------
 DROP TABLE IF EXISTS `migration`;
@@ -340,37 +718,10 @@ CREATE TABLE `session` (
 -- ----------------------------
 -- Records of session
 -- ----------------------------
-INSERT INTO `session` VALUES ('06ogufe7l2q7l5lmq9ko9uehc5', '1441039173', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('0qj92i1ditg6s3t9pjtkn0as52', '1439224576', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A32333A222F6261636B656E642F7765622F736974652F696E646578223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('15qov7ttrulis5lt8bhkhsg5c0', '1438673324', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('1cm4dmefpjvuavh1fqdrpkau43', '1442372590', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('1qso1lmog93fivhfg9lsqq5rj1', '1439784635', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('3fvmqf7c3ilhg6n0ereg50i490', '1439484748', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('3q46rbme7qll553l6s2bs1kfj0', '1440385070', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('7757873s1ujvfcijskn19ii237', '1439807501', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B);
-INSERT INTO `session` VALUES ('a894i4bcvi2vflia1rrgftfuk6', '1439784636', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('aoijhlup81o2260hlgqlqosck3', '1439291392', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A32333A222F6261636B656E642F7765622F736974652F696E646578223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('ben8htg51hccrbgkeufds5no50', '1441120310', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A32333A222F6261636B656E642F7765622F736974652F696E646578223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('euhj99pnsdj9scd3pnvpf30oi4', '1439466685', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('hfsrdasc0hbhc7q7jfj7m4e9j3', '1440091739', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B5F5F69647C693A313B);
-INSERT INTO `session` VALUES ('hmslfrj23uol8ju4l8m57edff2', '1439309676', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A313B616374696F6E732D72656469726563747C733A32333A222F6261636B656E642F7765622F757365722F61646D696E223B);
-INSERT INTO `session` VALUES ('lukqjh1mctsnep2qj1unqs86v4', '1439308458', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('m00l46ccek59vjrgrv47kvpad4', '1439513266', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('m8tjgnvto332cf5uqkftmd8kf6', '1439362816', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('mnisrkoms7vlofbrmjep93fhv0', '1439528071', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('ms6re6fd8hrfcsjrp12eqdd301', '1438673214', 0x5F5F666C6173687C613A303A7B7D5F5F636170746368612F736974652F636170746368617C733A373A226365786F756C78223B5F5F636170746368612F736974652F63617074636861636F756E747C693A313B);
-INSERT INTO `session` VALUES ('mvvmn9oe3haat380g7v28ttpt2', '1439550011', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('nc2bl9su0hqkc8jm7hgm5ut0r4', '1439357438', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('qgfg60motjqkppifhj3tj8s480', '1439350217', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('r3e5vuc6g1asjnh3cpm1d5k0s5', '1439784638', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('r73s1llijpl4mh4h3c9bpmsm95', '1439784637', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('rl6v3288rgni69hpq83aj0h1d7', '1439784635', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('tqt8ogfc3p3l8vl527qosm5h44', '1439485669', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('u75umtnachfp2ciiasrjifbaj5', '1439350217', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B);
-INSERT INTO `session` VALUES ('ujlnc0d8i8pls0q0c6sk3laro2', '1439784635', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('va8f19co3a6fbabk7m09lc2o42', '1439207242', 0x5F5F666C6173687C613A303A7B7D);
-INSERT INTO `session` VALUES ('vmo3tqljev1lt7dvli4gesmqk4', '1439784636', 0x5F5F666C6173687C613A303A7B7D5F5F69647C693A333B);
-INSERT INTO `session` VALUES ('vtfqk2bfotui11me3ri4s9g9n2', '1439485668', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B);
+INSERT INTO `session` VALUES ('73p3dqhpsdm0nc89qu3vi3a044', '1443589181', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A363A222F61646D696E223B5F5F69647C693A313B616374696F6E732D72656469726563747C733A31373A222F61646D696E2F757365722F61646D696E223B);
+INSERT INTO `session` VALUES ('9feq2eqc07241gu1pb6ffl0kq5', '1443414078', 0x5F5F666C6173687C613A303A7B7D);
+INSERT INTO `session` VALUES ('eu9ogm1h4c3t91vfi7m15d56p7', '1442393160', 0x5F5F666C6173687C613A303A7B7D5F5F72657475726E55726C7C733A31333A222F6261636B656E642F7765622F223B);
+INSERT INTO `session` VALUES ('q2kt7lok5eamv9ump92sqffq40', '1443428639', 0x5F5F666C6173687C613A303A7B7D);
 
 -- ----------------------------
 -- Table structure for `setting`
