@@ -5,7 +5,7 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
-
+$baseUrl = str_replace('/backend/web', '/admin', (new \yii\web\Request())->getBaseUrl());
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
@@ -13,9 +13,8 @@ return [
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
-        'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
+        'request' => [
+            'baseUrl' => $baseUrl,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
