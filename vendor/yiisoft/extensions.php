@@ -115,6 +115,7 @@ return array(
                 array(
                     '@vsoft/express' => $vendorDir . '/vsoft/express',
 					'@vsoft/buildingProject' => $vendorDir . '/vsoft/building-project',
+					'@vsoft/news' => $vendorDir . '/vsoft/news',
                 ),
         ),
     'johnb0' =>
