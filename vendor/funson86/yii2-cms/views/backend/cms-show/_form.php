@@ -5,24 +5,13 @@ use funson86\cms\Module;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use funson86\cms\models\CmsCatalog;
-use mihaildev\ckeditor\CKEditor;
+use vsoft\express\widgets\CKEditor;
 use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\CmsShow */
 /* @var $form yii\widgets\ActiveForm */
-$uploadFunction = <<<EOD
-function refreshCsrf() {
-    var form = jQuery('.cke_dialog_ui_input_file iframe').contents().find('form');
-	var csrfName = yii.getCsrfParam();
-	if (!form.find('input[name=' + csrfName + ']').length) {
-		var csrfTokenInput = jQuery('<input/>').attr({'type': 'hidden', 'name': csrfName}).val(yii.getCsrfToken());
-		form.append(csrfTokenInput);
-	}
-}
-EOD;
-$this->registerJs($uploadFunction, View::POS_END, 'ckeditor-upload-image');
 ?>
 
 <div class="cms-show-form">
@@ -43,11 +32,10 @@ $this->registerJs($uploadFunction, View::POS_END, 'ckeditor-upload-image');
 
     <?= $form->field($model, 'brief')->textInput(['maxlength' => 1022]) ?>
 
-    <?= $form->field($model, 'content')->widget(CKEditor::className(),[
+    <?= $form->field($model, 'content')->widget(CKEditor::className(), [
         'editorOptions' => [
             'preset' => 'full',
-            'inline' => false,
-			'filebrowserUploadUrl' => Url::to('/express/upload/editor-image')
+            'inline' => false
         ],
     ]); ?>
 
